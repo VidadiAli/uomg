@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+            list-style: none;
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            width: 80%;
+            border: 1px solid rgb(25, 156, 196);
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .main>h1 {
+            text-align: center;
+            color: rgb(25, 156, 196);
+            font-size: 2rem;
+        }
+
+        .main>div {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .main>div>input,
+        button {
+            border: 1px solid rgb(25, 156, 196);
+            padding: 20px;
+            outline: none;
+        }
+
+        .main>div>button {
+            background-color: rgb(64, 207, 226);
+            transition: .5s;
+            color: white;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .main>div>button:hover {
+            background-color: rgb(25, 156, 196);
+        }
+
+        .main>.alan {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+        }
+
+        .main>.alan>div {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 25px;
+            width: 100%;
+        }
+
+        .main>.alan>div>span {
+            width: 15%;
+            padding: 20px 10px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .main>.alan>div>input {
+            width: 40%;
+            padding: 20px 10px;
+            background-color: rgb(25, 156, 196);
+            color: white;
+            border: none;
+            border-bottom: 1px solid rgb(25, 156, 196);
+            outline: none;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+
+        .main>.alan>div>input::placeholder {
+            color: white;
+            font-size: 1rem;
+        }
+
+
+        @media(max-width: 1300px) {
+            .main>.alan>div {
+                gap: 5px;
+            }
+        }
+
+        @media(max-width: 800px) {
+            .main>.alan>div {
+                gap: 5px;
+                flex-direction: column;
+            }
+
+            .main>.alan>div>input {
+                width: 100%;
+            }
+
+            .main>.alan>div>span {
+                width: 100%;
+                text-align: left;
+            }
+        }
+
+        @media(max-width: 450px) {
+            .main {
+                width: 95%;
+            }
+
+            .main>h1 {
+                font-size: 1.5rem;
+            }
+
+            .main>.alan>div>input::placeholder {
+                font-size: .8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="main">
+        <h1>Buradan Ümumi Orta Müvəfəqiyyət Göstəricisini hesablaya bilərsiz.</h1>
+        <div>
+            <input type="text" placeholder="Modulların sayını daxil edin: " id="say">
+            <button id="klik">Qiymətləri yazmaq üçün alan açın</button>
+        </div>
+        <div class="alan"></div>
+        <button id="hesabla" style="cursor: pointer;">Hesabla</button>
+    </section>
+
+    <script>
+        const alan = document.getElementsByClassName('alan')[0];
+        let puan = 0, puanUp = 0, puanDown = 0;
+        klik.onclick = function () {
+            if (say.value === "" || say.value === " " || say.value === "0") {
+                alert("Zəhmət olmasa modulların sayını daxil edin: ");
+            }
+            else {
+                if (alan.innerHTML === "") {
+                    for (let i = 1; i <= say.value; i++) {
+                        const modul = document.createElement('div');
+                        const modulName = document.createElement('span');
+                        modulName.textContent = "Modul " + i;
+                        const modulBal = document.createElement('input');
+                        modulBal.setAttribute("class", "modulBal");
+                        modulBal.setAttribute("placeholder", `Modul ${i}-dən əldə olunan balı daxil edin`);
+                        modulBal.setAttribute("type", "number");
+                        const modulKredit = document.createElement('input');
+                        modulKredit.setAttribute("placeholder", `Modul ${i} üçün ayrılan krediti daxil edin`);
+                        modulKredit.setAttribute("class", "modulKredit");
+                        modulKredit.setAttribute("type", "number");
+
+                        modul.append(modulName, modulBal, modulKredit);
+                        alan.append(modul);
+                    }
+                }
+            }
+        }
+
+        const modulBal1 = document.getElementsByClassName('modulBal'),
+            modulKredit1 = document.getElementsByClassName('modulKredit');
+        let sayim = 0;
+        hesabla.onclick = function () {
+            if (say.value === "" || say.value === " " || say.value === "0") {
+                alert("Zəhmət olmasa modulların sayını daxil edin: ");
+            }
+            else if (alan.innerHTML === "") {
+                alert("Zəhmət olmasa qiymətlərin yazılacağı alanı açın")
+            }
+            else {
+                for (let i = 0; i < say.value; i++) {
+                    if (modulBal1[i].value === "" || modulKredit1[i].value === "") {
+                        sayim++;
+                    }
+                }
+
+                if (sayim === 0) {
+                    for (let i = 0; i < say.value; i++) {
+                        puanUp = Number(puanUp) + (Number(modulBal1[i].value) * Number(modulKredit1[i].value));
+                        puanDown = Number(puanDown) + Number(modulKredit1[i].value);
+                    }
+                    alert((puanUp / puanDown).toFixed(5));
+                }
+                else {
+                    alert("Bütün modulların qiymət və kreditlərini daxil edin");
+                    sayim = 0;
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
